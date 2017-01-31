@@ -1,7 +1,26 @@
 require 'singleton'
+
 class Piece
-  def initialize(piece)
-    @piece = piece
+  def initialize
+  end
+
+  def self.new_piece(piece_type)
+    case piece_type
+    when :p
+      Pawn.new
+    when :r
+      Rook.new
+    when :kn
+      Knight.new
+    when :b
+      Bishop.new
+    when :q
+      Queen.new
+    when :k
+      King.new
+    else
+      puts "could not find piece type"
+    end
   end
 end
 
