@@ -1,7 +1,7 @@
 require_relative 'piece'
 require 'byebug'
 class Board
-  attr_reader :CHESS_SYMBOLS
+  attr_reader :CHESS_SYMBOLS, :board
 
   CHESS_SETUP = [
     [[:r], [:kn], [:b], [:q], [:k], [:b], [:kn], [:r]],
@@ -41,13 +41,36 @@ class Board
   end
 
   def move_piece(start_pos, end_pos)
+    raise "ERROR: no piece at position" unless valid_start_pos?(start_pos) && valid_end_pos?(end_pos)
 
+    x1, y1 = start_pos
+    x2, y2 = end_pos
+    @board[x1][y1], @board[x2][y2] = @board[x2][y2], @board[x1][y1]
   end
 
-  def valid_space?
+  def self.in_board?(pos)
+    x,y = pos
+    return true if (0..7).include?(x) && (0..7).include?(y)
+    false
+  end
+
+  def blank?(pos)
+    x,y = pos
+    piece_in_space = @board[x][y]
+    piece_in_space.is_a?(NullPiece)
+  end
+
+  def valid_start_pos?(pos)
+    Board.in_board?(pos) && !blank?(pos)
+  end
+
+  def valid_end_pos?(pos)
+    x,y = pos
+    Board.in_board?(pos) && blank?(pos)
   end
     # The Board class should have a #move_piece(start_pos, end_pos) method. This should update the 2D grid and also the moved piece's position. You'll want to raise an exception if:
     # there is no piece at start_pos or
     # the piece cannot move to end_pos.
-
+  def move_ok?(piece, pos, end)
+  end
 end
